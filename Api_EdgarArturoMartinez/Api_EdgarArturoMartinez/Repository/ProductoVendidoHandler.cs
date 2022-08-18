@@ -74,5 +74,39 @@ namespace Api_EdgarArturoMartinez.Repository
                 return result;
             }
         }
+
+
+        public static bool CrearProductoVendido(ProductoVendido productoVendido)
+        {
+            bool result = false;
+            string query = "INSERT INTO ProductoVendido" +
+                "(Stock, IdProducto, IdVenta)" +
+                "VALUES (@stock, @idProducto, 1)";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@stock", productoVendido.Stock);
+                sqlCommand.Parameters.AddWithValue("@idProducto", productoVendido.IdProducto);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;
+            }
+        }
     }
 }

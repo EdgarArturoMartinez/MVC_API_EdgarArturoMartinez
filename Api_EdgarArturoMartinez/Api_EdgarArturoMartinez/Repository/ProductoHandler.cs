@@ -1,4 +1,5 @@
 ﻿using Api_EdgarArturoMartinez.Model;
+using Microsoft.Extensions.Hosting;
 using System.Data.SqlClient;
 
 namespace Api_EdgarArturoMartinez.Repository
@@ -56,6 +57,42 @@ namespace Api_EdgarArturoMartinez.Repository
             {
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
                 sqlCommand.Parameters.AddWithValue("@id", Id);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;
+            }
+        }
+
+
+        public static bool CrearProducto(Producto producto)
+        {
+            bool result = false;
+            string query = "INSERT INTO Producto" +
+                "(Descripciones, Costo, PrecioVenta, Stock, IdUsuario)" +
+                "VALUES (@descripciones, @costo, @precioVenta, @stock, 1)";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@descripciones", producto.Descripciones);
+                sqlCommand.Parameters.AddWithValue("@costo", producto.Costo);
+                sqlCommand.Parameters.AddWithValue("@precioVenta", producto.PrecioVenta);
+                sqlCommand.Parameters.AddWithValue("@stock", producto.Stock);
 
                 try
                 {
