@@ -14,5 +14,8 @@ namespace Api_EdgarArturoMartinez.Controllers
         {
             return ProductoVendidoHandler.GetProductosVendidos();
         }
+
+        
+
     }
 }

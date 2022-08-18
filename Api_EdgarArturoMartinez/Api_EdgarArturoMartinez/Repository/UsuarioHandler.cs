@@ -44,5 +44,112 @@ namespace Api_EdgarArturoMartinez.Repository
             }
             return userList;    
         }
+
+
+        public static bool EliminarUsuario(int Id)
+        {
+            bool result = false;
+            string query = "DELETE FROM Usuario " +
+                "WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@id", Id);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;  
+            }
+        }
+
+
+        public static bool CrearUsuario(Usuario usuario)
+        {            
+            bool result = false;
+            string query = "INSERT INTO Usuario" +
+                "(Nombre, Apellido, NombreUsuario, Contraseña, Mail)" +
+                "VALUES (@nombre, @apellido, @nombreUsuario, @contrasena, @mail)";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@nombre", usuario.Nombre);
+                sqlCommand.Parameters.AddWithValue("@apellido", usuario.Apellido);
+                sqlCommand.Parameters.AddWithValue("@nombreUsuario", usuario.NombreUsuario);
+                sqlCommand.Parameters.AddWithValue("@contrasena", usuario.Contrasena);
+                sqlCommand.Parameters.AddWithValue("@mail", usuario.Mail);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;
+            }                      
+        }
+
+
+        public static bool ModificarUsuario(Usuario usuario)
+        {
+            string query = "UPDATE Usuario " +
+                "SET Nombre = @nombre, Apellido = @apellido, NombreUsuario = @nombreUsuario, Contraseña = @contrasena, Mail = @mail " +
+                "WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                bool result = false;
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@id", usuario.Id);
+                sqlCommand.Parameters.AddWithValue("@nombre", usuario.Nombre);
+                sqlCommand.Parameters.AddWithValue("@apellido", usuario.Apellido);
+                sqlCommand.Parameters.AddWithValue("@nombreUsuario", usuario.NombreUsuario);
+                sqlCommand.Parameters.AddWithValue("@contrasena", usuario.Contrasena);
+                sqlCommand.Parameters.AddWithValue("@mail", usuario.Mail);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;
+            }
+        }
     }
 }
