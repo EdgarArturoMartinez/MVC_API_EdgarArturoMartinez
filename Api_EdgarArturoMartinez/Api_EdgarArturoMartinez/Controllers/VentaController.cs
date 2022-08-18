@@ -14,5 +14,20 @@ namespace Api_EdgarArturoMartinez.Controllers
         {
             return VentaHandler.GetVentas();
         }
+
+        [HttpDelete]
+        public bool EliminarVenta([FromBody] int id)
+        {
+            try
+            {
+                return VentaHandler.EliminarVenta(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
+        }
     }
 }

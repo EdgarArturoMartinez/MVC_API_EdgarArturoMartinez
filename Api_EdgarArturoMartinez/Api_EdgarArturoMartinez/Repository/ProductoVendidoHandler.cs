@@ -43,5 +43,36 @@ namespace Api_EdgarArturoMartinez.Repository
 
             return soldProductList;
         }
+
+        public static bool EliminarProductoVendido(int Id)
+        {
+            bool result = false;
+            string query = "DELETE FROM ProductoVendido " +
+                "WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@id", Id);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;
+            }
+        }
     }
 }

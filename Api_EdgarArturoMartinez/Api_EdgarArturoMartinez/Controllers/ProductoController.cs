@@ -14,5 +14,21 @@ namespace Api_EdgarArturoMartinez.Controllers
         {
             return ProductoHandler.GetProductos();
         }
+
+
+        [HttpDelete]
+        public bool EliminarProducto([FromBody] int id)
+        {
+            try
+            {
+                return ProductoHandler.EliminarProducto(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
+        }
     }
 }
