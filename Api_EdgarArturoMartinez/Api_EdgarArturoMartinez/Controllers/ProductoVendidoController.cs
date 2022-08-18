@@ -13,7 +13,16 @@ namespace Api_EdgarArturoMartinez.Controllers
         [HttpGet(Name = "GetProductosVendidos")]
         public List<ProductoVendido> GetProductosVendidos()
         {
-            return ProductoVendidoHandler.GetProductosVendidos();
+            try
+            {
+                return ProductoVendidoHandler.GetProductosVendidos();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<ProductoVendido>();
+            }
+            
         }
 
 
@@ -50,6 +59,26 @@ namespace Api_EdgarArturoMartinez.Controllers
                 return false;
             }
 
+        }
+
+
+        [HttpPut]
+        public bool ModificarProductoVendido([FromBody] PutProductoVendido productoVendido)
+        {
+            try
+            {
+                return ProductoVendidoHandler.ModificarProductoVendido(new ProductoVendido
+                {
+                    Id = productoVendido.Id,    
+                    Stock = productoVendido.Stock,
+                    IdProducto = productoVendido.IdProducto
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

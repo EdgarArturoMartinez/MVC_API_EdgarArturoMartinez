@@ -13,7 +13,16 @@ namespace Api_EdgarArturoMartinez.Controllers
         [HttpGet(Name = "GetVentas")]
         public List<Venta> GetVentas()
         {
-            return VentaHandler.GetVentas();
+            try
+            {
+                return VentaHandler.GetVentas();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<Venta>();   
+            }
+            
         }
 
         [HttpDelete]
@@ -47,6 +56,25 @@ namespace Api_EdgarArturoMartinez.Controllers
                 return false;
             }
 
+        }
+
+
+        [HttpPut]
+        public bool ModificarVenta([FromBody] PutVenta venta)
+        {
+            try
+            {
+                return VentaHandler.ModificarVenta(new Venta
+                {
+                   Id = venta.Id,
+                   Comentarios = venta.Comentarios
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

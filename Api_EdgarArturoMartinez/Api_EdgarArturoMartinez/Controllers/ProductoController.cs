@@ -13,7 +13,16 @@ namespace Api_EdgarArturoMartinez.Controllers
         [HttpGet(Name = "GetProductos")]
         public List<Producto> GetProductos()
         {
-            return ProductoHandler.GetProductos();
+            try
+            {
+                return ProductoHandler.GetProductos();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<Producto>();
+            }
+            
         }
 
 
@@ -52,6 +61,28 @@ namespace Api_EdgarArturoMartinez.Controllers
                 return false;
             }
 
+        }
+
+
+        [HttpPut]
+        public bool ModificarProducto([FromBody] PutProducto producto)
+        {
+            try
+            {
+                return ProductoHandler.ModificarProducto(new Producto
+                {
+                    Descripciones = producto.Descripciones,
+                    Costo = producto.Costo,
+                    PrecioVenta = producto.PrecioVenta,
+                    Stock = producto.Stock,
+                    Id = producto.Id
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }

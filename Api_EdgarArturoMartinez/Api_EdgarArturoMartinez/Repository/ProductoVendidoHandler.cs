@@ -108,5 +108,40 @@ namespace Api_EdgarArturoMartinez.Repository
                 return result;
             }
         }
+
+
+        public static bool ModificarProductoVendido(ProductoVendido productoVendido)
+        {
+            string query = "UPDATE ProductoVendido " +
+                "SET Stock = @stock, IdProducto = @idProducto " +
+                "WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                bool result = false;
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@id", productoVendido.Id);
+                sqlCommand.Parameters.AddWithValue("@stock", productoVendido.Stock);
+                sqlCommand.Parameters.AddWithValue("@idProducto", productoVendido.IdProducto);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;
+            }
+        }
     }
 }

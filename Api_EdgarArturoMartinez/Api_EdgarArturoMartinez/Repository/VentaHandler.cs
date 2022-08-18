@@ -1,4 +1,5 @@
 ﻿using Api_EdgarArturoMartinez.Model;
+using Microsoft.Extensions.Logging;
 using System.Data.SqlClient;
 
 namespace Api_EdgarArturoMartinez.Repository
@@ -82,6 +83,39 @@ namespace Api_EdgarArturoMartinez.Repository
             using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
             {
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@comentarios", venta.Comentarios);
+
+                try
+                {
+                    sqlConnection.Open();
+                    int numberOfRows = sqlCommand.ExecuteNonQuery();
+                    if (numberOfRows > 0)
+                    {
+                        result = true;
+                    }
+                    sqlConnection.Close();
+                }
+
+                catch (Exception ex)
+                {
+
+                    throw new Exception("There is an error on query definition! " + ex.Message);
+                }
+                return result;
+            }
+        }
+
+        public static bool ModificarVenta(Venta venta)
+        {
+            string query = "UPDATE Venta " +
+                "SET Comentarios = @comentarios " +
+                "WHERE Id = @id";
+
+            using (SqlConnection sqlConnection = new SqlConnection(ConnectionString))
+            {
+                bool result = false;
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@id", venta.Id);
                 sqlCommand.Parameters.AddWithValue("@comentarios", venta.Comentarios);
 
                 try
